@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Starlit Thorns & Sugar Dreams</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kosugi+Maru&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="assets/ui/heart-icon.png" type="image/png">
+</head>
+<body>
+  <div id="game-container" class="game-container">
+    <div class="scanline-overlay"></div>
+    <div class="crt-overlay"></div>
+
+    <div id="title-screen" class="screen active">
+      <div class="title-bg" style="background-image: url('assets/ui/title-bg.png')"></div>
+      <div class="title-content">
+        <h1 class="title-text">Starlit Thorns<br><span>&amp;</span><br>Sugar Dreams</h1>
+        <p class="title-subtitle">A wholesome yuri visual novel</p>
+        <div class="title-buttons">
+          <button class="btn btn-primary" id="btn-new-game">New Game</button>
+          <button class="btn btn-secondary" id="btn-continue" disabled>Continue</button>
+          <button class="btn btn-secondary" id="btn-gallery" style="display:none">Gallery</button>
+          <button class="btn btn-secondary" id="btn-settings-title">Settings</button>
+        </div>
+      </div>
+      <div class="heart-particles" id="title-hearts"></div>
+    </div>
+
+    <div id="game-screen" class="screen">
+      <div class="scene-container" id="scene-container">
+        <div class="background-layer" id="bg-layer"></div>
+        <div class="background-layer" id="bg-layer-next"></div>
+        <div class="sprite-container" id="sprite-container">
+          <div class="sprite-slot sprite-left" id="sprite-left">
+            <img id="sprite-left-img" src="" alt="">
+          </div>
+          <div class="sprite-slot sprite-center" id="sprite-center">
+            <img id="sprite-center-img" src="" alt="">
+          </div>
+          <div class="sprite-slot sprite-right" id="sprite-right">
+            <img id="sprite-right-img" src="" alt="">
+          </div>
+        </div>
+        <div class="cg-display" id="cg-display">
+          <img id="cg-image" src="" alt="">
+        </div>
+      </div>
+
+      <div class="textbox-container" id="textbox-container">
+        <div class="textbox-bg"></div>
+        <div class="textbox-content">
+          <div class="nameplate" id="nameplate">
+            <span id="name-text"></span>
+          </div>
+          <div class="dialogue-text" id="dialogue-text"></div>
+          <div class="advance-indicator" id="advance-indicator">&#9660;</div>
+        </div>
+      </div>
+
+      <div class="choice-container" id="choice-container"></div>
+
+      <div class="game-ui-top">
+        <button class="ui-btn" id="btn-auto" title="Auto">AUTO</button>
+        <button class="ui-btn" id="btn-skip" title="Skip">SKIP</button>
+        <button class="ui-btn" id="btn-log" title="Backlog">LOG</button>
+        <button class="ui-btn ui-btn-menu" id="btn-menu" title="Menu">&#9881;</button>
+      </div>
+    </div>
+
+    <div id="menu-overlay" class="overlay">
+      <div class="overlay-panel menu-panel">
+        <h2>Menu</h2>
+        <button class="btn btn-primary" id="btn-save">Save</button>
+        <button class="btn btn-primary" id="btn-load">Load</button>
+        <button class="btn btn-primary" id="btn-settings-game">Settings</button>
+        <button class="btn btn-danger" id="btn-title">Return to Title</button>
+        <button class="btn btn-secondary" id="btn-menu-close">Close</button>
+      </div>
+    </div>
+
+    <div id="save-overlay" class="overlay">
+      <div class="overlay-panel save-panel">
+        <h2 id="save-panel-title">Save</h2>
+        <div class="save-slots" id="save-slots"></div>
+        <button class="btn btn-secondary" id="btn-save-close">Close</button>
+      </div>
+    </div>
+
+    <div id="settings-overlay" class="overlay">
+      <div class="overlay-panel settings-panel">
+        <h2>Settings</h2>
+        <div class="setting-row">
+          <label>Text Speed</label>
+          <input type="range" id="setting-text-speed" min="1" max="10" value="5">
+          <span id="text-speed-val">5</span>
+        </div>
+        <div class="setting-row">
+          <label>Auto Speed</label>
+          <input type="range" id="setting-auto-speed" min="1" max="10" value="5">
+          <span id="auto-speed-val">5</span>
+        </div>
+        <div class="setting-row">
+          <label>BGM Volume</label>
+          <input type="range" id="setting-bgm-vol" min="0" max="10" value="7">
+          <span id="bgm-vol-val">7</span>
+        </div>
+        <div class="setting-row">
+          <label>SFX Volume</label>
+          <input type="range" id="setting-sfx-vol" min="0" max="10" value="7">
+          <span id="sfx-vol-val">7</span>
+        </div>
+        <button class="btn btn-secondary" id="btn-settings-close">Close</button>
+      </div>
+    </div>
+
+    <div id="backlog-overlay" class="overlay">
+      <div class="overlay-panel backlog-panel">
+        <h2>Backlog</h2>
+        <div class="backlog-entries" id="backlog-entries"></div>
+        <button class="btn btn-secondary" id="btn-backlog-close">Close</button>
+      </div>
+    </div>
+
+    <div id="gallery-overlay" class="overlay">
+      <div class="overlay-panel gallery-panel">
+        <h2>Gallery</h2>
+        <div class="gallery-grid" id="gallery-grid"></div>
+        <div class="ending-checklist" id="ending-checklist"></div>
+        <button class="btn btn-secondary" id="btn-gallery-close">Close</button>
+      </div>
+    </div>
+
+    <div id="gallery-viewer" class="overlay">
+      <img id="gallery-viewer-img" src="" alt="">
+      <p class="gallery-viewer-hint">Click anywhere to close</p>
+    </div>
+
+    <div id="ending-card" class="overlay">
+      <div class="ending-card-content">
+        <h2 id="ending-title"></h2>
+        <p id="ending-subtitle"></p>
+        <button class="btn btn-primary" id="btn-ending-title">Return to Title</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/animejs@4.0.2/lib/anime.iife.min.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/save.js"></script>
+  <script src="js/gallery.js"></script>
+  <script src="js/script.js"></script>
+  <script src="js/engine.js"></script>
+</body>
+</html>
