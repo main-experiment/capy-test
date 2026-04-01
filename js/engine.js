@@ -219,6 +219,8 @@ const Engine = (() => {
 
     if (!animate) {
       bgLayer.style.backgroundImage = `url('${src}')`;
+      bgLayer.style.opacity = '1';
+      bgNext.style.opacity = '0';
       return;
     }
 
@@ -226,9 +228,9 @@ const Engine = (() => {
     bgNext.style.opacity = '0';
 
     try {
-      const tl = anime.timeline({ easing: 'easeInOutQuad' });
-      tl.add({ targets: bgLayer, opacity: [1, 0], duration: 400 })
-        .add({ targets: bgNext, opacity: [0, 1], duration: 400 }, '-=200');
+      const tl = anime.timeline({ easing: 'easeInOutSine' });
+      tl.add({ targets: bgNext, opacity: [0, 1], duration: 800 })
+        .add({ targets: bgLayer, opacity: [1, 0], duration: 600 }, 0);
       tl.finished.then(() => {
         bgLayer.style.backgroundImage = `url('${src}')`;
         bgLayer.style.opacity = '1';
@@ -512,15 +514,19 @@ const Engine = (() => {
     if (!wasVisible) {
       slot.style.opacity = '0';
       try {
-        const tl = anime.timeline({ targets: slot });
-        tl.add({ translateY: [20, 0], opacity: [0, 1], duration: 400, easing: 'easeOutQuad' })
-          .add({ scaleX: [1.02, 1], scaleY: [0.98, 1], duration: 200, easing: 'easeOutElastic(1, 0.5)' }, '-=100');
+        anime({
+          targets: slot,
+          translateY: [30, 0],
+          opacity: [0, 1],
+          duration: 500,
+          easing: 'easeOutCubic'
+        });
       } catch(e) {
         slot.style.opacity = '1';
       }
     } else {
       try {
-        anime({ targets: img, opacity: [0.5, 1], duration: 200, easing: 'easeOutQuad' });
+        anime({ targets: img, opacity: [0.3, 1], duration: 300, easing: 'easeOutQuad' });
       } catch(e) {}
     }
 
@@ -550,7 +556,22 @@ const Engine = (() => {
   function hideAllSprites() {
     ['left', 'center', 'right'].forEach(pos => {
       const slot = $(`sprite-${pos}`);
-      if (slot) { slot.style.display = 'none'; slot.style.opacity = '1'; }
+      if (!slot || slot.style.display !== 'flex') return;
+      try {
+        anime({
+          targets: slot,
+          opacity: [1, 0],
+          duration: 400,
+          easing: 'easeOutQuad',
+          complete: () => {
+            slot.style.display = 'none';
+            slot.style.opacity = '1';
+          }
+        });
+      } catch(e) {
+        slot.style.display = 'none';
+        slot.style.opacity = '1';
+      }
     });
     state.breathingAnims.forEach(a => { try { a.pause(); } catch(e){} });
     state.breathingAnims = [];

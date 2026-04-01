@@ -70,7 +70,7 @@ html, body {
   position: absolute; inset: 0;
   background-size: cover;
   background-position: center;
-  filter: brightness(0.6) saturate(1.2);
+  filter: brightness(0.75) saturate(1.1);
 }
 
 .title-content {
@@ -200,6 +200,11 @@ html, body {
   max-width: 45vw;
   object-fit: contain;
   filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4));
+}
+
+.sprite-slot img[src*="/lunette/"] {
+  transform: scale(1.35);
+  transform-origin: bottom center;
 }
 
 .sprite-left { left: 5%; }
