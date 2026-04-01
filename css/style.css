@@ -203,7 +203,7 @@ html, body {
 }
 
 .sprite-slot img[src*="/lunette/"] {
-  transform: scale(1.35);
+  transform: scaleX(1.55);
   transform-origin: bottom center;
 }
 
