@@ -69,7 +69,6 @@ const AudioManager = (() => {
       return;
     }
     if (typeof MusicEngine !== 'undefined') {
-      MusicEngine.init();
       MusicEngine.setVolume(bgmVolume);
       MusicEngine.setMood(mood);
     }
@@ -119,10 +118,6 @@ const AudioManager = (() => {
     }
   }
 
-  if (typeof MusicEngine !== 'undefined') {
-    MusicEngine.init();
-    MusicEngine.setVolume(bgmVolume);
-  }
 
   return {
     setBGMVolume,
