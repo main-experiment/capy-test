@@ -305,7 +305,7 @@ const Engine = (() => {
       });
     }
 
-    typewriterText(line.text || '...');
+    typewriterText(typeof line.text === 'string' ? line.text : '...');
 
     autoSaveCheck();
   }
@@ -316,7 +316,9 @@ const Engine = (() => {
 
     const el = $('dialogue-text');
     const indicator = $('advance-indicator');
-    state.currentText = text;
+    el.textContent = '';
+    state.currentText = typeof text === 'string' ? text : '';
+    text = state.currentText;
     state.isTyping = true;
     indicator.style.opacity = '0';
 

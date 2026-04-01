@@ -10,7 +10,7 @@ window.MusicEngine = (() => {
   };
 
   try {
-    if (typeof Tone === 'undefined') return noop;
+    const TONE_CDN = 'https://cdn.jsdelivr.net/npm/tone@15.1.22/build/Tone.min.js';
 
     const MOODS = {
       title: {
@@ -178,6 +178,7 @@ window.MusicEngine = (() => {
       affection: 0,
       volume: 0.7,
       toneStarted: false,
+      toneLoadPromise: null,
       pendingMood: null,
       pendingSetTimer: null,
       pendingStopTimer: null,
@@ -195,10 +196,52 @@ window.MusicEngine = (() => {
     const TRANSITION_SECONDS = 2;
     const PATTERN_BARS = 4;
 
+
+    function toneReady() {
+      return typeof Tone !== 'undefined';
+    }
+
+    function getToneScriptSrc() {
+      const deferredScript = document.getElementById('tone-script');
+      return deferredScript?.dataset?.src || TONE_CDN;
+    }
+
+    function loadTone() {
+      if (toneReady()) return Promise.resolve(Tone);
+      if (state.toneLoadPromise) return state.toneLoadPromise;
+
+      state.toneLoadPromise = new Promise((resolve, reject) => {
+        const existingScript = document.querySelector('script[data-tone-runtime="true"]');
+        if (existingScript) {
+          existingScript.addEventListener('load', () => resolve(Tone), { once: true });
+          existingScript.addEventListener('error', reject, { once: true });
+          return;
+        }
+
+        const script = document.createElement('script');
+        script.src = getToneScriptSrc();
+        script.async = true;
+        script.dataset.toneRuntime = 'true';
+        script.onload = () => {
+          if (toneReady()) resolve(Tone);
+          else reject(new Error('Tone.js failed to initialize'));
+        };
+        script.onerror = reject;
+        document.head.appendChild(script);
+      }).catch(error => {
+        state.toneLoadPromise = null;
+        throw error;
+      });
+
+      return state.toneLoadPromise;
+    }
+
     async function ensureToneStarted() {
       if (state.toneStarted) return true;
+      await loadTone();
       await Tone.start();
       state.toneStarted = true;
+      init();
       if (state.pendingMood) {
         const nextMood = state.pendingMood;
         state.pendingMood = null;
@@ -255,8 +298,23 @@ window.MusicEngine = (() => {
       return `${bar}:${eighth}:${sixteenth}`;
     }
 
+    function sortEventsByTime(a, b) {
+      const [aBar, aEighth, aSixteenth] = a.time.split(':').map(Number);
+      const [bBar, bEighth, bSixteenth] = b.time.split(':').map(Number);
+      return (aBar * 64 + aEighth * 8 + aSixteenth) - (bBar * 64 + bEighth * 8 + bSixteenth);
+    }
+
+    function dedupeEventsByTime(events) {
+      const deduped = {};
+      events.forEach(event => {
+        deduped[event.time] = event;
+      });
+      return Object.values(deduped).sort(sortEventsByTime);
+    }
+
     function init() {
       if (state.initialized) return;
+      if (!state.toneStarted) return;
 
       const master = new Tone.Volume(normalizedToDb(state.volume)).toDestination();
       const padBus = new Tone.Volume(SILENT_DB).connect(master);
@@ -552,7 +610,7 @@ window.MusicEngine = (() => {
           break;
       }
 
-      return events;
+      return dedupeEventsByTime(events);
     }
 
     function generateArpeggioEvents(mood) {
@@ -612,7 +670,7 @@ window.MusicEngine = (() => {
         }
       }
 
-      return events;
+      return dedupeEventsByTime(events);
     }
 
     function createPadPart(mood) {
@@ -660,9 +718,10 @@ window.MusicEngine = (() => {
       state.patterns.arpeggio = createArpeggioPart(mood);
 
       Tone.Transport.position = '0:0:0';
-      state.patterns.pad.start(0);
-      state.patterns.melody.start(0);
-      state.patterns.arpeggio.start(0);
+      const startOffset = '+0.01';
+      state.patterns.pad.start(startOffset);
+      state.patterns.melody.start(startOffset);
+      state.patterns.arpeggio.start(startOffset);
     }
 
     function internalSetMood(moodName) {
@@ -703,12 +762,12 @@ window.MusicEngine = (() => {
         stop();
         return;
       }
-      init();
       if (!state.toneStarted) {
         state.pendingMood = moodName;
         state.currentMood = moodName;
         return;
       }
+      init();
       internalSetMood(moodName);
     }
 
@@ -728,6 +787,7 @@ window.MusicEngine = (() => {
     function setVolume(normalized) {
       state.volume = clamp(Number(normalized) || 0, 0, 1);
       init();
+      if (!state.initialized || !state.buses || !state.buses.master) return;
       state.buses.master.volume.rampTo(normalizedToDb(state.volume), 0.3);
     }
 
