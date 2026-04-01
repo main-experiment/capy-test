@@ -231,11 +231,17 @@ const Engine = (() => {
       const tl = anime.timeline({ easing: 'easeInOutSine' });
       tl.add({ targets: bgNext, opacity: [0, 1], duration: 800 })
         .add({ targets: bgLayer, opacity: [1, 0], duration: 600 }, 0);
-      tl.finished.then(() => {
-        bgLayer.style.backgroundImage = `url('${src}')`;
-        bgLayer.style.opacity = '1';
-        bgNext.style.opacity = '0';
-      });
+      tl.finished
+        .then(() => {
+          bgLayer.style.backgroundImage = `url('${src}')`;
+          bgLayer.style.opacity = '1';
+          bgNext.style.opacity = '0';
+        })
+        .catch(() => {
+          bgLayer.style.backgroundImage = `url('${src}')`;
+          bgLayer.style.opacity = '1';
+          bgNext.style.opacity = '0';
+        });
     } catch(e) {
       bgLayer.style.backgroundImage = `url('${src}')`;
     }
@@ -400,7 +406,10 @@ const Engine = (() => {
               startScene(nextId);
             }
           });
-        tl.finished.then(() => { state.transitioning = false; });
+        tl.finished
+          .then(() => { state.transitioning = false; })
+          .catch(() => { state.transitioning = false; });
+        setTimeout(() => { state.transitioning = false; }, 1200);
       } catch(e) {
         startScene(nextId);
         state.transitioning = false;
@@ -480,6 +489,12 @@ const Engine = (() => {
             startScene(opt.next);
           }
         });
+        setTimeout(() => {
+          if (state.transitioning) {
+            state.transitioning = false;
+            startScene(opt.next);
+          }
+        }, 800);
       } catch(e) {
         state.transitioning = false;
         startScene(opt.next);
