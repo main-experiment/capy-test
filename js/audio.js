@@ -1,88 +1,127 @@
 const AudioManager = (() => {
   let bgmVolume = 0.7;
   let sfxVolume = 0.7;
-  let currentBGM = null;
-  let currentBGMSrc = '';
+  let sfxBus = null;
+  let clickSynth = null;
+  let chimeSynth = null;
+  let heartbeatSynth = null;
+  let sparkleSynth = null;
+  let whooshSynth = null;
+  let whooshFilter = null;
+
+  function toneReady() {
+    return typeof Tone !== 'undefined';
+  }
+
+  function initSFX() {
+    if (!toneReady() || sfxBus) return;
+    sfxBus = new Tone.Gain(sfxVolume).toDestination();
+    clickSynth = new Tone.Synth({
+      oscillator: { type: 'triangle' },
+      envelope: { attack: 0.001, decay: 0.04, sustain: 0, release: 0.08 },
+      volume: -12
+    }).connect(sfxBus);
+    chimeSynth = new Tone.Synth({
+      oscillator: { type: 'sine' },
+      envelope: { attack: 0.01, decay: 0.3, sustain: 0.1, release: 1.2 },
+      volume: -8
+    }).connect(sfxBus);
+    heartbeatSynth = new Tone.MembraneSynth({
+      pitchDecay: 0.05,
+      octaves: 3,
+      envelope: { attack: 0.001, decay: 0.25, sustain: 0, release: 0.2 },
+      volume: -6
+    }).connect(sfxBus);
+    sparkleSynth = new Tone.MetalSynth({
+      frequency: 420,
+      envelope: { attack: 0.001, decay: 0.3, release: 0.15 },
+      harmonicity: 5.1,
+      modulationIndex: 24,
+      resonance: 3000,
+      octaves: 1.8,
+      volume: -16
+    }).connect(sfxBus);
+    whooshFilter = new Tone.Filter(1200, 'lowpass').connect(sfxBus);
+    whooshSynth = new Tone.NoiseSynth({
+      noise: { type: 'pink' },
+      envelope: { attack: 0.01, decay: 0.25, sustain: 0, release: 0.2 },
+      volume: -18
+    }).connect(whooshFilter);
+  }
 
   function setBGMVolume(v) {
-    bgmVolume = v;
-    if (currentBGM) currentBGM.volume = bgmVolume;
+    bgmVolume = Math.max(0, Math.min(1, Number(v) || 0));
+    if (typeof MusicEngine !== 'undefined') {
+      MusicEngine.setVolume(bgmVolume);
+    }
   }
 
   function setSFXVolume(v) {
-    sfxVolume = v;
+    sfxVolume = Math.max(0, Math.min(1, Number(v) || 0));
+    if (sfxBus) {
+      sfxBus.gain.rampTo(sfxVolume, 0.1);
+    }
   }
 
-  function playBGM(src) {
-    if (!src) { stopBGM(); return; }
-    if (src === currentBGMSrc && currentBGM && !currentBGM.paused) return;
-    stopBGM();
-    try {
-      const audio = new Audio(src);
-      audio.loop = true;
-      audio.volume = bgmVolume;
-      audio.play().catch(e => console.warn('BGM not available:', src, e.message));
-      currentBGM = audio;
-      currentBGMSrc = src;
-    } catch (e) {
-      console.warn('BGM load failed:', src, e.message);
+  function playBGM(mood) {
+    if (!mood) {
+      stopBGM();
+      return;
+    }
+    if (typeof MusicEngine !== 'undefined') {
+      MusicEngine.init();
+      MusicEngine.setVolume(bgmVolume);
+      MusicEngine.setMood(mood);
     }
   }
 
   function stopBGM() {
-    if (currentBGM) {
-      currentBGM.pause();
-      currentBGM.src = '';
-      currentBGM = null;
-      currentBGMSrc = '';
+    if (typeof MusicEngine !== 'undefined') {
+      MusicEngine.stop();
     }
   }
 
-  function crossfadeBGM(newSrc, duration = 1000) {
-    if (!newSrc) { stopBGM(); return; }
-    if (newSrc === currentBGMSrc) return;
-    const old = currentBGM;
-    if (old) {
-      const fadeOut = setInterval(() => {
-        if (old.volume > 0.05) {
-          old.volume = Math.max(0, old.volume - 0.05);
-        } else {
-          clearInterval(fadeOut);
-          old.pause();
-          old.src = '';
-        }
-      }, duration / 20);
-    }
-    try {
-      const audio = new Audio(newSrc);
-      audio.loop = true;
-      audio.volume = 0;
-      audio.play().then(() => {
-        const fadeIn = setInterval(() => {
-          if (audio.volume < bgmVolume - 0.05) {
-            audio.volume = Math.min(bgmVolume, audio.volume + 0.05);
-          } else {
-            audio.volume = bgmVolume;
-            clearInterval(fadeIn);
-          }
-        }, duration / 20);
-      }).catch(e => console.warn('BGM crossfade not available:', newSrc, e.message));
-      currentBGM = audio;
-      currentBGMSrc = newSrc;
-    } catch (e) {
-      console.warn('BGM crossfade load failed:', newSrc, e.message);
+  function crossfadeBGM(mood) {
+    playBGM(mood);
+  }
+
+  function playSFX(name) {
+    if (!name || !toneReady()) return;
+    initSFX();
+    Tone.start().catch(() => {});
+
+    switch (name) {
+      case 'heartbeat':
+        heartbeatSynth.triggerAttackRelease('C2', '8n', undefined, 0.9 * sfxVolume);
+        setTimeout(() => {
+          heartbeatSynth.triggerAttackRelease('G1', '16n', undefined, 0.6 * sfxVolume);
+        }, 120);
+        break;
+      case 'chime':
+        chimeSynth.triggerAttackRelease('C5', '8n', undefined, 0.7 * sfxVolume);
+        chimeSynth.triggerAttackRelease('G5', '4n', '+0.08', 0.45 * sfxVolume);
+        break;
+      case 'whoosh':
+        whooshFilter.frequency.cancelAndHoldAtTime(Tone.now());
+        whooshFilter.frequency.setValueAtTime(400, Tone.now());
+        whooshFilter.frequency.linearRampToValueAtTime(3200, Tone.now() + 0.25);
+        whooshSynth.triggerAttackRelease('8n', undefined, 0.7 * sfxVolume);
+        break;
+      case 'sparkle':
+        sparkleSynth.triggerAttackRelease('16n', undefined, 0.6 * sfxVolume);
+        clickSynth.triggerAttackRelease('E6', '16n', '+0.05', 0.45 * sfxVolume);
+        chimeSynth.triggerAttackRelease('C6', '8n', '+0.1', 0.35 * sfxVolume);
+        break;
+      case 'click':
+      default:
+        clickSynth.triggerAttackRelease('C6', '32n', undefined, 0.45 * sfxVolume);
+        break;
     }
   }
 
-  function playSFX(src) {
-    if (!src) return;
-    try {
-      const audio = new Audio(src);
-      audio.volume = sfxVolume;
-      audio.play().catch(e => console.warn('SFX not available:', src, e.message));
-    } catch (e) {
-      console.warn('SFX load failed:', src, e.message);
-    }
+  if (typeof MusicEngine !== 'undefined') {
+    MusicEngine.init();
+    MusicEngine.setVolume(bgmVolume);
   }
 
   return {
