@@ -6,6 +6,7 @@ scene1: {
   id: 'scene1',
   name: 'The Velvet Threshold',
   background: 'assets/backgrounds/mansion-entrance.png',
+  bgm: 'mysterious',
   dialogue: [
     { speaker: null, text: "The evening air tastes of lavender and old secrets." },
     { speaker: null, text: "I stand before the gates of the Velvet Garden Mansion, my single leather suitcase trembling in my grip — or perhaps that's just my hands." },
@@ -24,7 +25,7 @@ scene1: {
     { speaker: null, text: "No response. But somewhere deeper inside the mansion, I hear humming. A soft, lilting melody that seems to curl around the corners like silk ribbon." },
     { speaker: null, text: "My ears perk up involuntarily. It's the loveliest sound I've ever heard." },
     { speaker: 'lunette', expression: 'blush', position: 'center', text: "Well... I suppose I should follow the music." },
-    { speaker: null, text: "I step inside. The door closes behind me — softly, like a whispered 'welcome home.'" },
+    { speaker: null, text: "I step inside. The door closes behind me — softly, like a whispered 'welcome home.'", sfx: 'chime' },
     { speaker: null, text: "And just for a moment, I swear I see tiny hearts blooming in the air around me, dissolving like morning frost before I can be sure they were ever real." },
     { speaker: 'lunette', expression: 'shy', position: 'center', text: "...I think I'm going to like it here. Or go completely mad. Possibly both.", hide: true }
   ],
@@ -35,6 +36,7 @@ scene2: {
   id: 'scene2',
   name: 'A Name Like Midnight',
   background: 'assets/backgrounds/hallway.png',
+  bgm: 'mysterious',
   dialogue: [
     { speaker: null, text: "I follow the humming through the winding hallway. Each step echoes softly, as if the mansion is listening to my footfalls." },
     { speaker: null, text: "The humming grows louder, sweeter. It's coming from behind a set of double doors carved with climbing roses." },
@@ -74,6 +76,7 @@ scene2_pretty: {
   id: 'scene2_pretty',
   name: 'A Name Like Midnight',
   background: 'assets/backgrounds/library.png',
+  bgm: 'playful',
   dialogue: [
     { speaker: 'lunette', expression: 'blush', position: 'left', text: "Y-you're very pretty..." },
     { speaker: null, text: "The words tumble out before I can catch them. My face ignites like a furnace. My ears go completely vertical with mortification." },
@@ -96,6 +99,7 @@ scene2_formal: {
   id: 'scene2_formal',
   name: 'A Name Like Midnight',
   background: 'assets/backgrounds/library.png',
+  bgm: 'playful',
   dialogue: [
     { speaker: 'lunette', expression: 'neutral', position: 'left', text: "Are you the lady of the house?" },
     { speaker: 'sable', expression: 'neutral', position: 'right', text: "..." },
@@ -116,6 +120,7 @@ scene3: {
   id: 'scene3',
   name: 'Sugar & Flour Clouds',
   background: 'assets/backgrounds/kitchen.png',
+  bgm: 'cozy',
   dialogue: [
     { speaker: null, text: "The next morning arrives in a blaze of golden sunlight through rose-tinted windows. I'm halfway through dusting the second-floor parlor when Sable materializes beside me like a pastel-colored ghost." },
     { speaker: 'sable', expression: 'happy', position: 'right', text: "Lunette~! Stop dusting immediately! It's baking day!" },
@@ -157,6 +162,7 @@ scene3_feed: {
   id: 'scene3_feed',
   name: 'Sugar & Flour Clouds',
   background: 'assets/backgrounds/kitchen.png',
+  bgm: 'cozy',
   dialogue: [
     { speaker: null, text: "Before my brain can intervene with something sensible, my hands act on their own. I pick up a warm cookie and hold it up to Sable's lips." },
     { speaker: 'lunette', expression: 'blush', position: 'left', text: "H-here. Say 'ahh.'" },
@@ -179,6 +185,7 @@ scene3_plate: {
   id: 'scene3_plate',
   name: 'Sugar & Flour Clouds',
   background: 'assets/backgrounds/kitchen.png',
+  bgm: 'cozy',
   dialogue: [
     { speaker: null, text: "I carefully arrange several cookies on a small china plate and slide it across the counter toward Sable with a small, proud smile." },
     { speaker: 'lunette', expression: 'happy', position: 'left', text: "Please, help yourself. I think they turned out rather well." },
@@ -196,6 +203,7 @@ scene4: {
   id: 'scene4',
   name: 'Petals That Remember',
   background: 'assets/backgrounds/garden.png',
+  bgm: 'romantic',
   dialogue: [
     { speaker: null, text: "The afternoon sun paints everything in watercolors. Sable takes my hand at the back door and leads me through the garden's wrought-iron gate, and I completely forget how to exhale." },
     { speaker: null, text: "It's not a garden. It's an entire world. Pathways of smooth white stone wind between flower beds that shimmer with impossible colors — blues that seem to hum, reds that whisper secrets, violets that sigh contentedly when you walk past." },
@@ -235,6 +243,7 @@ scene4_squeeze: {
   id: 'scene4_squeeze',
   name: 'Petals That Remember',
   background: 'assets/backgrounds/garden.png',
+  bgm: 'romantic',
   dialogue: [
     { speaker: null, text: "I squeeze Sable's hands. Not because I need an anchor anymore — but because I want to hold them. Because they're warm and soft and they feel like exactly where my hands are supposed to be." },
     { speaker: 'lunette', expression: 'blush', position: 'left', text: "Thank you. For grounding me. For... being here." },
@@ -256,6 +265,7 @@ scene4_tired: {
   id: 'scene4_tired',
   name: 'Petals That Remember',
   background: 'assets/backgrounds/garden.png',
+  bgm: 'romantic',
   dialogue: [
     { speaker: 'lunette', expression: 'shy', position: 'left', text: "I think I'm just tired. It's been a lot of new things all at once — the mansion, the magic, everything." },
     { speaker: null, text: "I gently withdraw my hands from Sable's. Something flickers across her face — disappointment? hurt? — but she covers it instantly with a practiced, cheerful smile." },
@@ -274,6 +284,7 @@ scene5: {
   id: 'scene5',
   name: 'Rain & Ribbon',
   background: 'assets/backgrounds/library.png',
+  bgm: 'romantic',
   dialogue: [
     { speaker: null, text: "Rain drums against the library's tall windows like thousands of tiny, desperate fingers. Three days into my new life at the Velvet Garden Mansion, and this is the first truly grey day." },
     { speaker: null, text: "The library feels different in the rain — cozier, more intimate. The lamplight seems warmer. The books seem to lean closer together on their shelves, as if sharing secrets." },
@@ -313,6 +324,7 @@ scene6: {
   id: 'scene6',
   name: 'Cracked Porcelain Hearts',
   background: 'assets/backgrounds/bedroom.png',
+  bgm: 'emotional',
   dialogue: [
     { speaker: null, text: "Evening. Day five. I'm carefully carrying a tray of chamomile tea up to Sable's room when I hear it — not the mansion's usual comfortable creaks and whispers, but something rawer and more human. Someone crying." },
     { speaker: null, text: "The sound leads me to Sable's bedroom door. It's slightly ajar. Through the narrow gap, I can see her sitting on the edge of her canopy bed, knees drawn tight to her chest, her long black hair curtaining her face completely." },
@@ -330,7 +342,7 @@ scene6: {
     { speaker: 'lunette', expression: 'shy', position: 'left', text: "Sable, listen to me—" },
     { speaker: 'sable', expression: 'menhera-cry', position: 'right', text: "I KNOW I'm too much! I know I'm clingy and dramatic and I fantasize about weddings on day one and I read books upside down and I cry at EVERYTHING and I get attached too fast and—" },
     { speaker: null, text: "She's sobbing now — ugly and raw and completely real, her whole body shaking with the force of it. The crescent moon lamp flickers frantically, as if the mansion itself is trembling with her.", effect: 'shake' },
-    { speaker: 'sable', expression: 'menhera-cry', position: 'right', text: "I'm so scared, Lunette. I'm so terrified you'll leave. I'm scared because I already care about you too much and it's only been FIVE DAYS. Five days and I already can't imagine waking up in this house without you here. What is WRONG with me?!" },
+    { speaker: 'sable', expression: 'menhera-cry', position: 'right', text: "I'm so scared, Lunette. I'm so terrified you'll leave. I'm scared because I already care about you too much and it's only been FIVE DAYS. Five days and I already can't imagine waking up in this house without you here. What is WRONG with me?!", sfx: 'heartbeat' },
     {
       speaker: null,
       text: "",
@@ -349,6 +361,7 @@ scene6_hug: {
   id: 'scene6_hug',
   name: 'Cracked Porcelain Hearts',
   background: 'assets/backgrounds/bedroom.png',
+  bgm: 'emotional',
   dialogue: [
     { speaker: null, text: "I don't think. I don't weigh options or consider professional boundaries. I just move." },
     { speaker: null, text: "I wrap my arms around Sable and pull her close — really, truly close, tight enough that she can feel my heartbeat hammering against hers.", effect: 'shake' },
@@ -373,6 +386,7 @@ scene6_comfort: {
   id: 'scene6_comfort',
   name: 'Cracked Porcelain Hearts',
   background: 'assets/backgrounds/bedroom.png',
+  bgm: 'emotional',
   dialogue: [
     { speaker: 'lunette', expression: 'neutral', position: 'left', text: "Everyone feels that way sometimes, Sable. Worrying that you're too much, that people will leave... it's more common than you might think." },
     { speaker: 'sable', expression: 'menhera-cry', position: 'right', text: "..." },
@@ -393,6 +407,7 @@ scene7: {
   id: 'scene7',
   name: 'The Dream Between Dreams',
   background: 'assets/backgrounds/dream-void.png',
+  bgm: 'dream',
   dialogue: [
     { speaker: null, text: "I fall asleep... and the world dissolves around me like watercolors in rain.", effect: 'glitch' },
     { speaker: null, text: "There are no walls here. No floor, no ceiling. Just an endless, breathing expanse of soft violet light, punctuated by floating fragments — torn pages from ancient books, rose petals frozen mid-drift, echoes of distant laughter preserved in shimmering amber." },
@@ -422,6 +437,7 @@ scene8: {
   id: 'scene8',
   name: 'Starlit Confession',
   background: 'assets/backgrounds/balcony-night.png',
+  bgm: 'confession',
   dialogue: [
     { speaker: null, text: "Evening. Day seven. The sun has set and the sky is a cathedral of deepening blue." },
     { speaker: null, text: "Sable takes my hand without a word and leads me through corridors I haven't seen before, up a narrow spiral staircase, through a door half-hidden behind a velvet curtain." },
@@ -460,8 +476,9 @@ scene8_confess: {
   id: 'scene8_confess',
   name: 'Starlit Confession',
   background: 'assets/backgrounds/balcony-night.png',
+  bgm: 'confession',
   dialogue: [
-    { speaker: 'lunette', expression: 'blush', position: 'left', text: "Sable... I love you." },
+    { speaker: 'lunette', expression: 'blush', position: 'left', text: "Sable... I love you.", sfx: 'sparkle' },
     { speaker: null, text: "Three words. They hang in the still night air like the bioluminescent petals below — glowing, fragile, impossibly, recklessly brave." },
     { speaker: null, text: "The garden below erupts. Every single flower blazes with light simultaneously, a supernova of blue and gold and pink and colors that have no names. The wind chimes ring out in a crystalline chord that sounds like joy given physical form.", effect: 'hearts' },
     { speaker: 'sable', expression: 'menhera-cry', position: 'right', text: "You—" },
@@ -484,6 +501,7 @@ scene8_wait: {
   id: 'scene8_wait',
   name: 'Starlit Confession',
   background: 'assets/backgrounds/balcony-night.png',
+  bgm: 'confession',
   dialogue: [
     { speaker: null, text: "I hesitate. The words are right there — sitting on the tip of my tongue, burning to be spoken — but old habit and older fear make me swallow them down." },
     { speaker: 'sable', expression: 'neutral', position: 'right', text: "...Okay. I'll go first. Before I completely lose my nerve and bolt." },
@@ -505,6 +523,7 @@ scene9: {
   id: 'scene9',
   name: 'The Garden Remembers',
   background: 'assets/backgrounds/garden.png',
+  bgm: 'tension',
   dialogue: [
     { speaker: null, text: "The final morning dawns golden and still." },
     { speaker: null, text: "I walk into the garden alone, guided by the mansion itself — doors swinging open before I reach them, lights flickering in gentle invitation, a warm insistence rising through the very floorboards beneath my bare feet." },
@@ -518,6 +537,7 @@ scene10_true: {
   id: 'scene10_true',
   name: 'Eternal Garden — True Ending',
   background: 'assets/backgrounds/garden.png',
+  bgm: 'ending-true',
   dialogue: [
     { speaker: null, text: "The garden is utterly, breathtakingly transformed." },
     { speaker: null, text: "Every flower, every petal, every single blade of grass glows with brilliant inner light. The roses have bloomed in colors I have no names for — colors that exist only in the deepest dreams, only in the sacred space between two hearts that beat as one." },
@@ -554,6 +574,7 @@ scene10_good: {
   id: 'scene10_good',
   name: 'Morning Light — Good Ending',
   background: 'assets/backgrounds/mansion-entrance.png',
+  bgm: 'ending-good',
   dialogue: [
     { speaker: null, text: "I find Sable at the mansion's grand entrance, leaning against the doorframe, watching the sunrise paint the eastern sky in gentle shades of peach and gold and rose." },
     { speaker: null, text: "She's wrapped in her favorite oversized cream sweater, her long black hair still wonderfully sleep-tousled, and when she sees me approaching, she smiles — soft and uncertain and achingly beautiful." },
@@ -581,6 +602,7 @@ scene10_bad: {
   id: 'scene10_bad',
   name: 'Fading Ribbons — Bad Ending',
   background: 'assets/backgrounds/hallway.png',
+  bgm: 'ending-bad',
   dialogue: [
     { speaker: null, text: "My suitcase is packed. The same battered leather suitcase I arrived with, only now it somehow feels immeasurably heavier than before." },
     { speaker: null, text: "The hallway is dimmer than I remember. The crystal chandeliers flicker with something that looks unmistakably like sadness. Even the berry-colored wallpaper seems to have lost its warm luster, fading to something pale and uncertain." },

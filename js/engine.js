@@ -34,6 +34,7 @@ const Engine = (() => {
     const hasSave = SaveManager.hasAnySave();
     $('btn-continue').disabled = !hasSave;
     $('btn-gallery').style.display = GalleryManager.hasAnyEnding() ? '' : 'none';
+    AudioManager.playBGM('title');
 
     $('btn-new-game').onclick = () => {
       resetState();
@@ -152,8 +153,12 @@ const Engine = (() => {
     closeAllOverlays();
     clearAllTimers();
     AudioManager.stopBGM();
+    if (typeof MusicEngine !== 'undefined') {
+      MusicEngine.setAffection(0);
+    }
     showScreen('title-screen');
     setupTitleScreen();
+    AudioManager.playBGM('title');
     spawnTitleHearts();
   }
 
@@ -166,6 +171,10 @@ const Engine = (() => {
     state.sceneId = sceneId;
     state.dialogueIndex = 0;
     if (!state.seenScenes.includes(sceneId)) state.seenScenes.push(sceneId);
+
+    if (typeof MusicEngine !== 'undefined') {
+      MusicEngine.setAffection(state.affection);
+    }
 
     if (scene.bgm !== undefined) {
       if (scene.bgm) AudioManager.crossfadeBGM(scene.bgm);
@@ -256,6 +265,10 @@ const Engine = (() => {
 
     if (line.effect) {
       playEffect(line.effect);
+    }
+
+    if (line.sfx) {
+      AudioManager.playSFX(line.sfx);
     }
 
     if (line.showCG) {
@@ -434,7 +447,11 @@ const Engine = (() => {
   }
 
   function selectChoice(opt) {
+    AudioManager.playSFX('click');
     state.affection += (opt.affection || 0);
+    if (typeof MusicEngine !== 'undefined') {
+      MusicEngine.setAffection(state.affection);
+    }
     $('choice-container').style.display = 'none';
     $('textbox-container').style.opacity = '1';
 
@@ -841,6 +858,9 @@ const Engine = (() => {
     resetState();
     state.affection = save.affection || 0;
     state.seenScenes = save.seenScenes || [];
+    if (typeof MusicEngine !== 'undefined') {
+      MusicEngine.setAffection(state.affection);
+    }
     showScreen('game-screen');
 
     state.sceneId = save.sceneId;
@@ -848,6 +868,7 @@ const Engine = (() => {
 
     const scene = StoryScript.getScene(state.sceneId);
     if (scene) {
+      if (scene.bgm) AudioManager.crossfadeBGM(scene.bgm);
       if (scene.background) setBackground(scene.background, false);
       showDialogueLine();
     }
