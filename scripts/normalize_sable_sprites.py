@@ -1,7 +1,7 @@
 from pathlib import Path
 from PIL import Image, ImageEnhance
 
-SABLE_DIR = Path('/home/capy-test/assets/sprites/sable')
+SABLE_DIR = Path(__file__).resolve().parent.parent / 'assets' / 'sprites' / 'sable'
 REFERENCE = 'neutral.png'
 TARGETS = ['happy.png', 'blush.png', 'teasing.png', 'menhera-cry.png', 'denpa-smile.png']
 MAIN_FILES = [REFERENCE, *TARGETS]
