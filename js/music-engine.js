@@ -230,6 +230,8 @@ window.MusicEngine = (() => {
         document.head.appendChild(script);
       }).catch(error => {
         state.toneLoadPromise = null;
+        const failedScript = document.querySelector('script[data-tone-runtime="true"]');
+        if (failedScript) failedScript.remove();
         throw error;
       });
 
